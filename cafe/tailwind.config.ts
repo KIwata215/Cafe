@@ -16,6 +16,10 @@ export default {
           "Noto Color Emoji",
         ],
       },
+      colors:{
+        customWhite:"#FFF9F4",
+        customOrage:"#D89323",
+      }
     },
   },
   plugins: [],
