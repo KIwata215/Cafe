@@ -5,6 +5,12 @@ import { redirect } from "@remix-run/node";
 import { CoffeebeanDBResponse } from "domain/Coffeebeans";
 import About_component from "~/component/about_component";
 import Variety_component from "~/component/Variety_component";
+import gazou from "public/コーヒー豆画像1.png";
+import gazou2 from "public/コーヒー豆画像２.png";
+import Roast_component from "~/component/Roast_component";
+import Flavor_component from "~/component/Flavor_component";
+import Taste_component from "~/component/Taste_component";
+import Recommended_ways_drink from "~/component/Recommended_ways_drink";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -34,15 +40,16 @@ export const loader: LoaderFunction = async ({ request }) => {
       title,
       about,
       image_url,
-      roast_id,
       sweetness,
       bitterness,
       sourness,
       richness,
       aroma,
       flavor_text,
-      roast_level(
-        name
+      roast(
+        roast_level(
+          name
+        )
       ),
       recommeded_drink(
         recommeded_drink_id(
@@ -73,7 +80,6 @@ console.log("Supabase response data:", JSON.stringify(data, null, 2));
 
 export default function CoffeebeansDetail() {
   const { coffeebeans } = useLoaderData() as { coffeebeans: CoffeebeanDBResponse[] };
-
   return (
     <div className="bg-customWhite/85">
       {coffeebeans.length === 0 ? (
@@ -94,7 +100,7 @@ export default function CoffeebeansDetail() {
                 />
                 {/* テキスト */}
                 <div className="absolute inset-0 flex items-center justify-">
-                  <h2 className="text-white text-xl  underline  underline-offset-8  ">{bean.title}</h2>
+                  <h2 className="text-white text-[26px]  underline  underline-offset-8  ">{bean.title}</h2>
                 </div>
                 {/* 三角形 */}
                 <div
@@ -104,56 +110,101 @@ export default function CoffeebeansDetail() {
                 >
                 </div>
               </div>
-              <About_component about={bean.about}/>
-              
-              <div className ="flex mt-6 ">
-                <Variety_component 
-                  variety=
-                    {bean.variety?.map((variety: { variety_type_id: { variety_type: unknown; }; }) => {
-                        return variety.variety_type_id.variety_type;
-                      })
-                    }
+              <div>
+                {/*Aboutコンポーネント呼び出し*/}
+                <About_component about={bean.about}/>
+                <div className ="flex mt-10 ">
+                  <div>
+                    {/*Varietyコンポーネント呼び出し*/}
+                    <Variety_component 
+                      variety=
+                        {bean.variety?.map((variety: { variety_type_id: { variety_type: unknown; }; }) => {
+                            return variety.variety_type_id.variety_type;
+                          })
+                        }
+                    />
+                    {/*Flavorコンポーネント呼び出し*/}
+                    <Flavor_component 
+                      flavor_type={bean.flavor?.map((flavor) => flavor.flavor_id.flavor_type) } 
+                      flavor_text={bean.flavor_text}                  
+                    />
+                  </div>
+                  {/*画像表示とRoastコンポーネント表示*/ }
+                  <div className=" flex flex-col items-center w-[175px] h-auto ml-3 mr-5">
+                    <img
+                    className="h-auto w-auto -mt-6"
+                      src={gazou}
+                      alt=""
+                    />
+                    {/* ROASTコンポーネント呼び出し*/}
+                    <div className="h-auto mr-5">
+                      <Roast_component Roast_level={"シナモンロースト"} Roast_time={15} Roast_temperature={180}                    />
+                    </div>
+                    <img
+                      className="h-auto w-auto mt-2"
+                      src={gazou2}
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div className="mr-3 ml-3">
+                  <Taste_component 
+                    sweetness={bean.sweetness} 
+                    bitterness={bean.bitterness} 
+                    sourness={bean.sourness} 
+                    richness={bean.richness} 
+                    aroma={bean.aroma}
+                  />
+                </div>
+                <div className="mr-3 ml-3 relative">
+                {/* Recommended_ways_drink コンポーネント */}
+                <Recommended_ways_drink
+                  recommeded_drink={
+                    bean.recommeded_drink?.map((drink) => drink.recommeded_drink_id.drink_method)
+                  }
                 />
-              </div>
+                </div>
+                {/* 三角形とその下の要素を管理 */}
+                <div className="relative mt-10">
+                  {/* 三角形の要素 */}
+                  <div
+                    className="bottom-0 left-0 w-0 h-0 
+                  border-l-transparent border-r-[100vw] border-r-transparent border-b-[100px] 
+                      border-b-customBlack/85"
+                  ></div>
+                  {/* お店の情報 */}
+                  <div className="bg-customBlack/85 w-full text-center text-white pb-10">
+                    {/* タイトル部分 */}
+                    <div className="text-center ">
+                      <span
+                        className="relative after:content-[''] after:absolute after:left-[-10px] 
+                              after:right-[-10px] after:bottom-[-2px] after:h-[2px] after:bg-customOrage text-[30px]"
+                      >
+                        お店の情報
+                      </span>
+                    </div>
+                    {/*ここにお店の詳細情報を表示*/}
+                    <div className="flex justify-center mt-10">
+                      <div className="w-[300px] h-[300px] bg-slate-300"></div>
+                    </div>
+                    <div className="flex flex-col items-center mt-10 space-y-4 text-[24px]">
+                      {/* 開店時間 */}
+                      <div>開店時間</div>
+                      <div>11:30~18:00</div>
 
+                      {/* 場所 */}
+                      <div>場所</div>
+                      <div className="pb-10">？？？？？？？</div>
+                      <div className=" border w-full border-customOrage"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
             </div> 
           ))}
         </div>
       )}
     </div>
-    // <div>
-    //   <h1>Coffee Beans Detail</h1>
-    //   {coffeebeans.length === 0 ? (
-    //     <p>No coffee beans found for the given title.</p>
-    //   ) : (
-    //     <ul>
-    //       {coffeebeans.map((bean) => (
-    //         <li key={bean.id}>
-    //           <h2>{bean.title}</h2>
-    //           <p>{bean.about}</p>
-    //           <img src={bean.image_url} alt={bean.title} style={{ width: "200px" }} />
-    //           <p>
-    //             <strong>Sweetness:</strong> {bean.sweetness} | <strong>Bitterness:</strong> {bean.bitterness}
-    //           </p>
-    //           <p>
-    //             <strong>Sourness:</strong> {bean.sourness} | <strong>Richness:</strong> {bean.richness} |{" "}
-    //             <strong>Aroma:</strong> {bean.aroma}
-    //           </p>
-    //           <p>
-    //             <strong>Roast Level:</strong> {bean.roast_level?.name}
-    //           </p>
-    //           <p>
-    //             <strong>Recommended Drinks:</strong>{" "}
-    //             {bean.recommeded_drink?.map((drink) => drink.recommeded_drink_id.drink_method).join(", ")}
-    //           </p>
-    //           <p>
-    //             <strong>Flavors:</strong>{" "}
-    //             {bean.flavor?.map((flavor) => flavor.flavor_id.flavor_type).join(", ")}
-    //           </p>
-    //         </li>
-    //       ))}
-    //     </ul>
-    //   )}
-    // </div>
   );
 }

@@ -19,6 +19,7 @@ export default {
       colors:{
         customWhite:"#FFF9F4",
         customOrage:"#D89323",
+        customBlack:"#20211F",
       }
     },
   },

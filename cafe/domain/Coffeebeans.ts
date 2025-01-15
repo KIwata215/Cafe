@@ -10,7 +10,8 @@ export type CoffeebeanDBResponse = {
   richness: number;
   aroma: number;
   flavor_text:string;
-  roast_level: {
+
+  roast: {
     name: string;
   };
   recommeded_drink: {

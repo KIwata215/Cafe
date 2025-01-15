@@ -6,7 +6,7 @@ export default function About_component({about}:About_component_Props){
     return(
       <div className="flex justify-center items-center p-1 relative">
         {/* 枠 */}
-        <div className="border border-black w-[360px] h-auto relative  ml-5 mr-5 p-4">
+        <div className="border border-black w-[360px] h-auto relative   p-4">
           {/* 左上に被る正方形 */}
           <div
             className="absolute top-[-25px] left-[10px] bg-customOrage text-white 
