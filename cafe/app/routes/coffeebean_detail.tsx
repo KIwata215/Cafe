@@ -3,7 +3,7 @@ import { supabase } from "lib/supabase";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { CoffeebeanDBResponse } from "domain/Coffeebeans";
-import About_component from "~/component/about_component";
+import About_component from "~/component/About_component";
 import Variety_component from "~/component/Variety_component";
 import gazou from "public/コーヒー豆画像1.png";
 import gazou2 from "public/コーヒー豆画像２.png";
